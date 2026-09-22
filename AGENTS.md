@@ -1,43 +1,60 @@
 # AGENTS Guidelines for This Repository
 
-This repository contains a Next.js application located in the root of this repository. When
-working on the project interactively with an agent (e.g. the Codex CLI) please follow
-the guidelines below so that the development experience – in particular Hot Module
-Replacement (HMR) – continues to work smoothly.
+## Project summary
 
-## 1. Use the Development Server, **not** `npm run build`
+This repository contains a Next.js Pages Router site for Codex collaboration
+exercises. Prefer small, reviewable diffs and fast iteration through the development
+server so changes are easy to inspect and verify.
 
-* **Always use `npm run dev` (or `pnpm dev`, `yarn dev`, etc.)** while iterating on the
-  application.  This starts Next.js in development mode with hot-reload enabled.
-* **Do _not_ run `npm run build` inside the agent session.**  Running the production
-  build command switches the `.next` folder to production assets which disables hot
-  reload and can leave the development server in an inconsistent state.  If a
-  production build is required, do it outside of the interactive agent workflow.
+## Key entrypoints
 
-## 2. Keep Dependencies in Sync
+- `pages/index.tsx` composes the main page.
+- `pages/_app.tsx` defines application-wide behavior and wrappers.
+- `components/` contains reusable page sections and UI components.
+- `styles/globals.css` contains global styles and Tailwind integration.
 
-If you add or update dependencies remember to:
+## Development workflow
 
-1. Update the appropriate lockfile (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`).
-2. Re-start the development server so that Next.js picks up the changes.
+1. Install the dependencies recorded in `pnpm-lock.yaml`:
 
-## 3. Coding Conventions
+   ```bash
+   pnpm install
+   ```
 
-* Prefer TypeScript (`.tsx`/`.ts`) for new components and utilities.
-* Co-locate component-specific styles in the same folder as the component when
-  practical.
+2. Start the Next.js development server with hot reload:
 
-## 4. Useful Commands Recap
+   ```bash
+   pnpm dev
+   ```
 
-| Command            | Purpose                                            |
-| ------------------ | -------------------------------------------------- |
-| `npm run dev`      | Start the Next.js dev server with HMR.             |
-| `npm run lint`     | Run ESLint checks.                                 |
-| `npm run test`     | Execute the test suite (if present).               |
-| `npm run build`    | **Production build – _do not run during agent sessions_** |
+3. Keep the development server running while iterating and manually smoke-test the
+   affected pages or interactions in the browser.
 
----
+## Validation workflow
 
-Following these practices ensures that the agent-assisted development workflow stays
-fast and dependable.  When in doubt, restart the dev server rather than running the
-production build.
+Run both repository checks before considering work complete:
+
+```bash
+pnpm lint
+pnpm typecheck
+```
+
+## Guardrails
+
+- Use `pnpm dev` and the development server for iterative changes.
+- Do not run `pnpm build` during interactive agent work. A production build can
+  replace `.next` development assets and disrupt hot reload.
+- Keep diffs scoped to the requested task and avoid unrelated cleanup or refactors.
+- Prefer TypeScript (`.ts` and `.tsx`) for new components and utilities.
+- If dependencies change, update `pnpm-lock.yaml` in the same change and restart the
+  development server so Next.js loads the updated dependency graph.
+
+## Definition of done
+
+Work is complete when:
+
+- `pnpm lint` passes.
+- `pnpm typecheck` passes.
+- Manual smoke checks are completed and documented, including the pages or
+  interactions checked.
+- A concise pull request summary and test plan are ready.
