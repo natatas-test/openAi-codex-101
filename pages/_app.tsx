@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Analytics } from "@vercel/analytics/next";
+import Navbar from "@/components/Navbar";
 export default function App({ Component, pageProps }: AppProps) {
   return <>
     <Head>
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <meta property="og:description" content="AGENTS.md is a simple, open format for guiding coding agents. Think of it as a README for agents." />
       <meta property="og:image" content="https://agents.md/og.png" />
     </Head>
+    <Navbar />
     <Component {...pageProps} />
     <Analytics />
   </>;
